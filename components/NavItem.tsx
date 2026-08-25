@@ -18,10 +18,10 @@ export default function NavItem({ href, label, count, icon }: NavItemProps) {
   return (
     <Link
       href={href}
-      className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+      className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium ${
         active
-          ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
-          : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-900"
+          ? "bg-[var(--accent)] text-white"
+          : "hover-surface text-[var(--text-sub)]"
       }`}
     >
       <span className="flex items-center gap-2">
@@ -29,7 +29,11 @@ export default function NavItem({ href, label, count, icon }: NavItemProps) {
         {label}
       </span>
       {typeof count === "number" && (
-        <span className="text-xs text-zinc-400 dark:text-zinc-500">{count}</span>
+        <span
+          className={`text-xs ${active ? "text-white/80" : "text-[var(--placeholder)]"}`}
+        >
+          {count}
+        </span>
       )}
     </Link>
   );

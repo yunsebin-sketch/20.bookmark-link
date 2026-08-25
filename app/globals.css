@@ -1,26 +1,70 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7f7f5;
+  --card: #ffffff;
+  --card-translucent: rgba(255, 255, 255, 0.8);
+  --text: #37352f;
+  --text-sub: #787774;
+  --placeholder: #9b9a97;
+  --border: #e3e3e0;
+  --accent: #2eaadc;
+  --accent-hover: #2898c4;
+  --hover-bg: #f1f1ef;
+  --error: #eb5757;
+  --success: #4dab9a;
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-foreground: var(--text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  font-family:
+    var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+a,
+button,
+input,
+select {
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.hover-surface:hover {
+  background-color: var(--hover-bg);
+}
+
+.hover-accent:hover {
+  background-color: var(--accent-hover);
+}
+
+.group:hover .link-title {
+  text-decoration: underline;
+}
+
+.input-field {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 16px;
+  background: var(--card);
+  color: var(--text);
+}
+
+.input-field::placeholder {
+  color: var(--placeholder);
+}
+
+.input-field:focus {
+  border-color: var(--accent);
+  outline: none;
 }

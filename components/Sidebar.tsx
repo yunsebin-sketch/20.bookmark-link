@@ -24,10 +24,10 @@ function AllIcon() {
 
 export default function Sidebar({ folders }: { folders: BookmarkFolder[] }) {
   return (
-    <aside className="flex w-56 shrink-0 flex-col gap-5 overflow-y-auto border-r border-zinc-200 bg-white px-3 py-6 dark:border-zinc-800 dark:bg-zinc-950">
+    <aside className="flex w-56 shrink-0 flex-col gap-5 overflow-y-auto border-r border-[var(--border)] bg-[var(--card)] px-3 py-6">
       <NavItem href="/" label="All" icon={<AllIcon />} />
       <div className="flex flex-col gap-1">
-        <p className="px-3 text-xs font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+        <p className="px-3 text-xs font-semibold uppercase tracking-wide text-[var(--placeholder)]">
           폴더
         </p>
         <FolderList folders={folders} />
