@@ -26,7 +26,7 @@ export function FolderProvider({
     if (!trimmed) return;
 
     const newFolder: BookmarkFolder = {
-      id: `folder-${Date.now()}`,
+      id: crypto.randomUUID(),
       name: trimmed,
     };
     setFolders((prev) => [...prev, newFolder]);

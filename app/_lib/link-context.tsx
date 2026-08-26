@@ -61,7 +61,7 @@ export function LinkProvider({
     }
 
     const newLink: BookmarkLink = {
-      id: `link-${Date.now()}`,
+      id: crypto.randomUUID(),
       title,
       url: normalizedUrl,
       description,
