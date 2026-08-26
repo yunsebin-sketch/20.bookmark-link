@@ -12,6 +12,7 @@
   --accent-hover: #2898c4;
   --hover-bg: #f1f1ef;
   --error: #eb5757;
+  --error-hover: #d64545;
   --success: #4dab9a;
 }
 
@@ -47,8 +48,26 @@ select {
   background-color: var(--accent-hover);
 }
 
+.hover-danger:hover {
+  background-color: var(--error-hover);
+}
+
 .group:hover .link-title {
   text-decoration: underline;
+}
+
+.folder-delete-btn {
+  opacity: 0;
+}
+
+.folder-row:hover .folder-delete-btn,
+.folder-row:focus-within .folder-delete-btn {
+  opacity: 1;
+}
+
+.folder-row:hover .folder-count,
+.folder-row:focus-within .folder-count {
+  opacity: 0;
 }
 
 .input-field {

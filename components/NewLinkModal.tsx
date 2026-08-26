@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useFolders } from "@/app/_lib/folder-context";
 import { useLinks } from "@/app/_lib/link-context";
 
@@ -40,7 +41,7 @@ export default function NewLinkModal({
     handleClose();
   }
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
       onClick={handleClose}
@@ -109,6 +110,7 @@ export default function NewLinkModal({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

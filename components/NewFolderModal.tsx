@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useFolders } from "@/app/_lib/folder-context";
 
 export default function NewFolderModal({
@@ -37,7 +38,7 @@ export default function NewFolderModal({
     handleClose();
   }
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
       onClick={handleClose}
@@ -86,6 +87,7 @@ export default function NewFolderModal({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

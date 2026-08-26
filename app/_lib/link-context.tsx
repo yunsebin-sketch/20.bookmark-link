@@ -6,6 +6,7 @@ import type { BookmarkLink } from "@/app/_lib/types";
 type LinkContextValue = {
   links: BookmarkLink[];
   addLink: (input: { url: string; folderId: string }) => void;
+  deleteLinksByFolder: (folderId: string) => void;
 };
 
 const LinkContext = createContext<LinkContextValue | null>(null);
@@ -39,8 +40,12 @@ export function LinkProvider({
     setLinks((prev) => [...prev, newLink]);
   }
 
+  function deleteLinksByFolder(folderId: string) {
+    setLinks((prev) => prev.filter((link) => link.folderId !== folderId));
+  }
+
   return (
-    <LinkContext.Provider value={{ links, addLink }}>
+    <LinkContext.Provider value={{ links, addLink, deleteLinksByFolder }}>
       {children}
     </LinkContext.Provider>
   );

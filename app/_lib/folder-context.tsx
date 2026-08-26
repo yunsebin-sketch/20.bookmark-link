@@ -6,6 +6,7 @@ import type { BookmarkFolder } from "@/app/_lib/types";
 type FolderContextValue = {
   folders: BookmarkFolder[];
   addFolder: (name: string) => void;
+  deleteFolder: (id: string) => void;
 };
 
 const FolderContext = createContext<FolderContextValue | null>(null);
@@ -31,8 +32,12 @@ export function FolderProvider({
     setFolders((prev) => [...prev, newFolder]);
   }
 
+  function deleteFolder(id: string) {
+    setFolders((prev) => prev.filter((folder) => folder.id !== id));
+  }
+
   return (
-    <FolderContext.Provider value={{ folders, addFolder }}>
+    <FolderContext.Provider value={{ folders, addFolder, deleteFolder }}>
       {children}
     </FolderContext.Provider>
   );
