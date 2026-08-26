@@ -16,6 +16,7 @@ export default function NewLinkModal({
   const { addLink } = useLinks();
   const [url, setUrl] = useState("");
   const [folderId, setFolderId] = useState(folders[0]?.id ?? "");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -35,10 +36,15 @@ export default function NewLinkModal({
     onClose();
   }
 
-  function handleSave() {
-    if (!url.trim() || !folderId) return;
-    addLink({ url, folderId });
-    handleClose();
+  async function handleSave() {
+    if (!url.trim() || !folderId || saving) return;
+    setSaving(true);
+    try {
+      await addLink({ url, folderId });
+      handleClose();
+    } finally {
+      setSaving(false);
+    }
   }
 
   return createPortal(
@@ -64,6 +70,7 @@ export default function NewLinkModal({
             id="link-url"
             type="url"
             autoFocus
+            disabled={saving}
             value={url}
             onChange={(event) => setUrl(event.target.value)}
             onKeyDown={(event) => {
@@ -82,6 +89,7 @@ export default function NewLinkModal({
           </label>
           <select
             id="link-folder"
+            disabled={saving}
             value={folderId}
             onChange={(event) => setFolderId(event.target.value)}
             className="input-field w-full text-sm"
@@ -97,16 +105,18 @@ export default function NewLinkModal({
           <button
             type="button"
             onClick={handleClose}
-            className="hover-surface rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text)]"
+            disabled={saving}
+            className="hover-surface rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text)] disabled:cursor-not-allowed disabled:opacity-40"
           >
             취소
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="hover-accent rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white"
+            disabled={saving}
+            className="hover-accent rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
           >
-            저장
+            {saving ? "저장 중..." : "저장"}
           </button>
         </div>
       </div>

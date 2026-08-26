@@ -28,7 +28,6 @@ export function FolderProvider({
     const newFolder: BookmarkFolder = {
       id: `folder-${Date.now()}`,
       name: trimmed,
-      count: 0,
     };
     setFolders((prev) => [...prev, newFolder]);
   }

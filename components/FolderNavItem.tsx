@@ -65,9 +65,11 @@ export default function FolderNavItem({ folder }: { folder: BookmarkFolder }) {
   const pathname = usePathname();
   const router = useRouter();
   const { deleteFolder } = useFolders();
-  const { deleteLinksByFolder } = useLinks();
+  const { links, deleteLinksByFolder } = useLinks();
   const [editOpen, setEditOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const linkCount = links.filter((link) => link.folderId === folder.id).length;
 
   const href = `/folder/${folder.id}`;
   const active = pathname === href;
@@ -113,7 +115,7 @@ export default function FolderNavItem({ folder }: { folder: BookmarkFolder }) {
       <span
         className={`folder-count pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs ${active ? "text-white/80" : "text-[var(--placeholder)]"}`}
       >
-        {folder.count}
+        {linkCount}
       </span>
       <div className="folder-actions absolute right-1.5 top-1/2 flex -translate-y-1/2 items-center gap-0.5">
         <button
