@@ -70,12 +70,12 @@ select {
   opacity: 0;
 }
 
-.link-delete-btn {
+.link-actions {
   opacity: 0;
 }
 
-.link-card:hover .link-delete-btn,
-.link-card:focus-within .link-delete-btn {
+.link-card:hover .link-actions,
+.link-card:focus-within .link-actions {
   opacity: 1;
 }
 

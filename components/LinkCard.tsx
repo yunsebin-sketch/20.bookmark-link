@@ -3,7 +3,26 @@
 import { useState, type MouseEvent } from "react";
 import { useLinks } from "@/app/_lib/link-context";
 import DeleteLinkModal from "@/components/DeleteLinkModal";
+import EditLinkModal from "@/components/EditLinkModal";
 import type { BookmarkLink } from "@/app/_lib/types";
+
+function PencilIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+    >
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+    </svg>
+  );
+}
 
 function TrashIcon() {
   return (
@@ -26,8 +45,14 @@ export default function LinkCard({ link }: { link: BookmarkLink }) {
   const domain = new URL(link.url).hostname.replace(/^www\./, "");
   const { deleteLink } = useLinks();
   const [thumbnailError, setThumbnailError] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const showThumbnail = Boolean(link.thumbnail) && !thumbnailError;
+
+  function handleEditClick(event: MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    setEditOpen(true);
+  }
 
   function handleDeleteClick(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
@@ -38,6 +63,9 @@ export default function LinkCard({ link }: { link: BookmarkLink }) {
     deleteLink(link.id);
     setConfirmOpen(false);
   }
+
+  const actionButtonClass =
+    "hover-surface rounded-md border border-[var(--border)] bg-[var(--card)] p-1.5 text-[var(--text-sub)]";
 
   return (
     <div className="link-card group relative">
@@ -77,14 +105,27 @@ export default function LinkCard({ link }: { link: BookmarkLink }) {
           </div>
         </div>
       </a>
-      <button
-        type="button"
-        onClick={handleDeleteClick}
-        aria-label={`${link.title} 링크 삭제`}
-        className="link-delete-btn hover-surface absolute right-2 top-2 rounded-md border border-[var(--border)] bg-[var(--card)] p-1.5 text-[var(--text-sub)]"
-      >
-        <TrashIcon />
-      </button>
+      <div className="link-actions absolute right-2 top-2 flex items-center gap-1">
+        <button
+          type="button"
+          onClick={handleEditClick}
+          aria-label={`${link.title} 링크 수정`}
+          className={actionButtonClass}
+        >
+          <PencilIcon />
+        </button>
+        <button
+          type="button"
+          onClick={handleDeleteClick}
+          aria-label={`${link.title} 링크 삭제`}
+          className={actionButtonClass}
+        >
+          <TrashIcon />
+        </button>
+      </div>
+      {editOpen && (
+        <EditLinkModal link={link} onClose={() => setEditOpen(false)} />
+      )}
       <DeleteLinkModal
         open={confirmOpen}
         linkTitle={link.title}

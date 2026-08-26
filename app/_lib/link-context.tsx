@@ -6,6 +6,10 @@ import type { BookmarkLink } from "@/app/_lib/types";
 type LinkContextValue = {
   links: BookmarkLink[];
   addLink: (input: { url: string; folderId: string }) => Promise<void>;
+  updateLink: (
+    id: string,
+    updates: { folderId: string; title: string; description: string },
+  ) => void;
   deleteLink: (id: string) => void;
   deleteLinksByFolder: (folderId: string) => void;
 };
@@ -67,6 +71,29 @@ export function LinkProvider({
     setLinks((prev) => [...prev, newLink]);
   }
 
+  function updateLink(
+    id: string,
+    updates: { folderId: string; title: string; description: string },
+  ) {
+    const trimmedTitle = updates.title.trim();
+    if (!trimmedTitle || !updates.folderId) return;
+
+    const trimmedDescription = updates.description.trim();
+
+    setLinks((prev) =>
+      prev.map((link) =>
+        link.id === id
+          ? {
+              ...link,
+              folderId: updates.folderId,
+              title: trimmedTitle,
+              description: trimmedDescription || undefined,
+            }
+          : link,
+      ),
+    );
+  }
+
   function deleteLink(id: string) {
     setLinks((prev) => prev.filter((link) => link.id !== id));
   }
@@ -77,7 +104,7 @@ export function LinkProvider({
 
   return (
     <LinkContext.Provider
-      value={{ links, addLink, deleteLink, deleteLinksByFolder }}
+      value={{ links, addLink, updateLink, deleteLink, deleteLinksByFolder }}
     >
       {children}
     </LinkContext.Provider>
