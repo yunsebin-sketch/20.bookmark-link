@@ -56,12 +56,12 @@ select {
   text-decoration: underline;
 }
 
-.folder-delete-btn {
+.folder-actions {
   opacity: 0;
 }
 
-.folder-row:hover .folder-delete-btn,
-.folder-row:focus-within .folder-delete-btn {
+.folder-row:hover .folder-actions,
+.folder-row:focus-within .folder-actions {
   opacity: 1;
 }
 

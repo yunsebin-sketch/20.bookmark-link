@@ -6,6 +6,7 @@ import { useState, type MouseEvent } from "react";
 import { useFolders } from "@/app/_lib/folder-context";
 import { useLinks } from "@/app/_lib/link-context";
 import DeleteFolderModal from "@/components/DeleteFolderModal";
+import EditFolderModal from "@/components/EditFolderModal";
 import type { BookmarkFolder } from "@/app/_lib/types";
 
 function FolderIcon() {
@@ -21,6 +22,24 @@ function FolderIcon() {
       className="h-4 w-4 shrink-0"
     >
       <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" />
+    </svg>
+  );
+}
+
+function PencilIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+    >
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
     </svg>
   );
 }
@@ -47,10 +66,16 @@ export default function FolderNavItem({ folder }: { folder: BookmarkFolder }) {
   const router = useRouter();
   const { deleteFolder } = useFolders();
   const { deleteLinksByFolder } = useLinks();
+  const [editOpen, setEditOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const href = `/folder/${folder.id}`;
   const active = pathname === href;
+
+  function handleEditClick(event: MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    setEditOpen(true);
+  }
 
   function handleDeleteClick(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
@@ -66,11 +91,15 @@ export default function FolderNavItem({ folder }: { folder: BookmarkFolder }) {
     }
   }
 
+  const actionButtonClass = `hover-surface rounded-md p-1.5 ${
+    active ? "text-white" : "text-[var(--text-sub)]"
+  }`;
+
   return (
     <div className="folder-row group relative">
       <Link
         href={href}
-        className={`flex w-full items-center justify-between gap-2 rounded-lg py-2 pl-3 pr-8 text-sm font-medium ${
+        className={`flex w-full items-center gap-2 rounded-lg py-2 pl-3 pr-16 text-sm font-medium ${
           active
             ? "bg-[var(--accent)] text-white"
             : "hover-surface text-[var(--text-sub)]"
@@ -80,22 +109,33 @@ export default function FolderNavItem({ folder }: { folder: BookmarkFolder }) {
           <FolderIcon />
           <span className="truncate">{folder.name}</span>
         </span>
-        <span
-          className={`folder-count text-xs ${active ? "text-white/80" : "text-[var(--placeholder)]"}`}
-        >
-          {folder.count}
-        </span>
       </Link>
-      <button
-        type="button"
-        onClick={handleDeleteClick}
-        aria-label={`${folder.name} 폴더 삭제`}
-        className={`folder-delete-btn hover-surface absolute right-1.5 top-1/2 -translate-y-1/2 rounded-md p-1.5 ${
-          active ? "text-white" : "text-[var(--text-sub)]"
-        }`}
+      <span
+        className={`folder-count pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs ${active ? "text-white/80" : "text-[var(--placeholder)]"}`}
       >
-        <TrashIcon />
-      </button>
+        {folder.count}
+      </span>
+      <div className="folder-actions absolute right-1.5 top-1/2 flex -translate-y-1/2 items-center gap-0.5">
+        <button
+          type="button"
+          onClick={handleEditClick}
+          aria-label={`${folder.name} 폴더 이름 수정`}
+          className={actionButtonClass}
+        >
+          <PencilIcon />
+        </button>
+        <button
+          type="button"
+          onClick={handleDeleteClick}
+          aria-label={`${folder.name} 폴더 삭제`}
+          className={actionButtonClass}
+        >
+          <TrashIcon />
+        </button>
+      </div>
+      {editOpen && (
+        <EditFolderModal folder={folder} onClose={() => setEditOpen(false)} />
+      )}
       <DeleteFolderModal
         open={confirmOpen}
         folderName={folder.name}
