@@ -1,6 +1,8 @@
+"use client";
+
 import NavItem from "@/components/NavItem";
 import FolderList from "@/components/FolderList";
-import type { BookmarkFolder } from "@/app/_lib/types";
+import { useFolders } from "@/app/_lib/folder-context";
 
 function AllIcon() {
   return (
@@ -22,7 +24,9 @@ function AllIcon() {
   );
 }
 
-export default function Sidebar({ folders }: { folders: BookmarkFolder[] }) {
+export default function Sidebar() {
+  const { folders } = useFolders();
+
   return (
     <aside className="flex w-56 shrink-0 flex-col gap-5 overflow-y-auto border-r border-[var(--border)] bg-[var(--card)] px-3 py-6">
       <NavItem href="/" label="All" icon={<AllIcon />} />
