@@ -70,6 +70,15 @@ select {
   opacity: 0;
 }
 
+.link-delete-btn {
+  opacity: 0;
+}
+
+.link-card:hover .link-delete-btn,
+.link-card:focus-within .link-delete-btn {
+  opacity: 1;
+}
+
 .input-field {
   border: 1px solid var(--border);
   border-radius: 6px;
