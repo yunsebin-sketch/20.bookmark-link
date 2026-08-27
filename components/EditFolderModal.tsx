@@ -14,25 +14,31 @@ export default function EditFolderModal({
 }) {
   const { renameFolder } = useFolders();
   const [name, setName] = useState(folder.name);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape" && !saving) onClose();
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
+  }, [onClose, saving]);
 
-  function handleSave() {
-    if (!name.trim()) return;
-    renameFolder(folder.id, name);
+  async function handleSave() {
+    if (saving || !name.trim()) return;
+    setSaving(true);
+    try {
+      await renameFolder(folder.id, name);
+    } finally {
+      setSaving(false);
+    }
     onClose();
   }
 
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-      onClick={onClose}
+      onClick={saving ? undefined : onClose}
     >
       <div
         className="flex w-full max-w-sm flex-col gap-5 rounded-lg border border-[var(--border)] bg-[var(--card)] p-6"
@@ -65,16 +71,18 @@ export default function EditFolderModal({
           <button
             type="button"
             onClick={onClose}
-            className="hover-surface rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text)]"
+            disabled={saving}
+            className="hover-surface rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text)] disabled:opacity-50"
           >
             취소
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="hover-accent rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white"
+            disabled={saving}
+            className="hover-accent rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
           >
-            저장
+            {saving ? "저장 중…" : "저장"}
           </button>
         </div>
       </div>

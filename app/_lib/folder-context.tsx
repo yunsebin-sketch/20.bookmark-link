@@ -14,7 +14,7 @@ import type { BookmarkFolder } from "@/app/_lib/types";
 type FolderContextValue = {
   folders: BookmarkFolder[];
   addFolder: (name: string) => Promise<void>;
-  renameFolder: (id: string, name: string) => void;
+  renameFolder: (id: string, name: string) => Promise<void>;
   deleteFolder: (id: string) => void;
 };
 
@@ -31,6 +31,8 @@ export function FolderProvider({
   const [supabase] = useState(() => createClient());
   // 폴더 추가 요청이 진행 중인지 추적해 버튼 중복 클릭으로 인한 중복 삽입을 막는다.
   const addingRef = useRef(false);
+  // 폴더 이름 수정 요청이 진행 중인지 추적해 중복 요청을 막는다.
+  const renamingRef = useRef(false);
 
   useEffect(() => {
     let active = true;
@@ -82,15 +84,29 @@ export function FolderProvider({
     }
   }
 
-  function renameFolder(id: string, name: string) {
+  async function renameFolder(id: string, name: string) {
     const trimmed = name.trim();
-    if (!trimmed) return;
+    if (!trimmed || renamingRef.current) return;
 
-    setFolders((prev) =>
-      prev.map((folder) =>
-        folder.id === id ? { ...folder, name: trimmed } : folder,
-      ),
-    );
+    renamingRef.current = true;
+    try {
+      const { data, error } = await supabase
+        .from("folders")
+        .update({ name: trimmed })
+        .eq("id", id)
+        .select("id, name")
+        .single();
+
+      if (error || !data) return;
+
+      setFolders((prev) =>
+        prev.map((folder) =>
+          folder.id === id ? { ...folder, name: data.name } : folder,
+        ),
+      );
+    } finally {
+      renamingRef.current = false;
+    }
   }
 
   function deleteFolder(id: string) {
