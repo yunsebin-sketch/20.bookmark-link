@@ -18,7 +18,7 @@ type LinkContextValue = {
     id: string,
     updates: { folderId: string; title: string; description: string },
   ) => Promise<void>;
-  deleteLink: (id: string) => void;
+  deleteLink: (id: string) => Promise<void>;
   deleteLinksByFolder: (folderId: string) => void;
 };
 
@@ -57,6 +57,8 @@ export function LinkProvider({
   const addingRef = useRef(false);
   // 링크 수정 요청이 진행 중인지 추적해 중복 요청을 막는다.
   const updatingRef = useRef(false);
+  // 링크 삭제 요청이 진행 중인지 추적해 중복 요청을 막는다.
+  const deletingRef = useRef(false);
 
   useEffect(() => {
     let active = true;
@@ -171,8 +173,19 @@ export function LinkProvider({
     }
   }
 
-  function deleteLink(id: string) {
-    setLinks((prev) => prev.filter((link) => link.id !== id));
+  async function deleteLink(id: string) {
+    if (deletingRef.current) return;
+
+    deletingRef.current = true;
+    try {
+      const { error } = await supabase.from("links").delete().eq("id", id);
+
+      if (error) return;
+
+      setLinks((prev) => prev.filter((link) => link.id !== id));
+    } finally {
+      deletingRef.current = false;
+    }
   }
 
   function deleteLinksByFolder(folderId: string) {

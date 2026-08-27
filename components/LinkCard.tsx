@@ -78,8 +78,8 @@ export default function LinkCard({ link }: { link: BookmarkLink }) {
     setConfirmOpen(true);
   }
 
-  function handleConfirmDelete() {
-    deleteLink(link.id);
+  async function handleConfirmDelete() {
+    await deleteLink(link.id);
     setConfirmOpen(false);
   }
 
