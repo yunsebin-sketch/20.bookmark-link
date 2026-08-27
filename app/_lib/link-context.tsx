@@ -17,7 +17,7 @@ type LinkContextValue = {
   updateLink: (
     id: string,
     updates: { folderId: string; title: string; description: string },
-  ) => void;
+  ) => Promise<void>;
   deleteLink: (id: string) => void;
   deleteLinksByFolder: (folderId: string) => void;
 };
@@ -55,6 +55,8 @@ export function LinkProvider({
   const [supabase] = useState(() => createClient());
   // 링크 추가 요청이 진행 중인지 추적해 저장 버튼 중복 클릭으로 인한 중복 삽입을 막는다.
   const addingRef = useRef(false);
+  // 링크 수정 요청이 진행 중인지 추적해 중복 요청을 막는다.
+  const updatingRef = useRef(false);
 
   useEffect(() => {
     let active = true;
@@ -135,27 +137,38 @@ export function LinkProvider({
     }
   }
 
-  function updateLink(
+  async function updateLink(
     id: string,
     updates: { folderId: string; title: string; description: string },
   ) {
     const trimmedTitle = updates.title.trim();
-    if (!trimmedTitle || !updates.folderId) return;
+    if (!trimmedTitle || !updates.folderId || updatingRef.current) return;
 
     const trimmedDescription = updates.description.trim();
 
-    setLinks((prev) =>
-      prev.map((link) =>
-        link.id === id
-          ? {
-              ...link,
-              folderId: updates.folderId,
-              title: trimmedTitle,
-              description: trimmedDescription || undefined,
-            }
-          : link,
-      ),
-    );
+    updatingRef.current = true;
+    try {
+      const { data, error } = await supabase
+        .from("links")
+        .update({
+          folder_id: Number(updates.folderId),
+          title: trimmedTitle,
+          description: trimmedDescription || null,
+        })
+        .eq("id", id)
+        .select("id, url, title, description, thumbnail_url, folder_id")
+        .single();
+
+      if (error || !data) return;
+
+      setLinks((prev) =>
+        prev.map((link) =>
+          link.id === id ? toBookmarkLink(data as LinkRow) : link,
+        ),
+      );
+    } finally {
+      updatingRef.current = false;
+    }
   }
 
   function deleteLink(id: string) {

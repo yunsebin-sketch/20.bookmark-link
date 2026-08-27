@@ -18,25 +18,31 @@ export default function EditLinkModal({
   const [folderId, setFolderId] = useState(link.folderId);
   const [title, setTitle] = useState(link.title);
   const [description, setDescription] = useState(link.description ?? "");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape" && !saving) onClose();
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
+  }, [onClose, saving]);
 
-  function handleSave() {
-    if (!title.trim()) return;
-    updateLink(link.id, { folderId, title, description });
+  async function handleSave() {
+    if (saving || !title.trim()) return;
+    setSaving(true);
+    try {
+      await updateLink(link.id, { folderId, title, description });
+    } finally {
+      setSaving(false);
+    }
     onClose();
   }
 
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-      onClick={onClose}
+      onClick={saving ? undefined : onClose}
     >
       <div
         className="flex w-full max-w-sm flex-col gap-5 rounded-lg border border-[var(--border)] bg-[var(--card)] p-6"
@@ -54,6 +60,7 @@ export default function EditLinkModal({
           </label>
           <select
             id="edit-link-folder"
+            disabled={saving}
             value={folderId}
             onChange={(event) => setFolderId(event.target.value)}
             className="input-field w-full text-sm"
@@ -76,6 +83,7 @@ export default function EditLinkModal({
             id="edit-link-title"
             type="text"
             autoFocus
+            disabled={saving}
             value={title}
             onChange={(event) => setTitle(event.target.value)}
             onKeyDown={(event) => {
@@ -95,6 +103,7 @@ export default function EditLinkModal({
           <textarea
             id="edit-link-description"
             rows={3}
+            disabled={saving}
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             placeholder="링크 설명을 입력하세요"
@@ -105,16 +114,18 @@ export default function EditLinkModal({
           <button
             type="button"
             onClick={onClose}
-            className="hover-surface rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text)]"
+            disabled={saving}
+            className="hover-surface rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text)] disabled:opacity-50"
           >
             취소
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="hover-accent rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white"
+            disabled={saving}
+            className="hover-accent rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
           >
-            저장
+            {saving ? "저장 중…" : "저장"}
           </button>
         </div>
       </div>
