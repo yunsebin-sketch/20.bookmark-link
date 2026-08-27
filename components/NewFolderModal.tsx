@@ -13,6 +13,7 @@ export default function NewFolderModal({
 }) {
   const { addFolder } = useFolders();
   const [name, setName] = useState("");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -28,14 +29,21 @@ export default function NewFolderModal({
   if (!open) return null;
 
   function handleClose() {
+    if (saving) return;
     setName("");
     onClose();
   }
 
-  function handleSave() {
-    if (!name.trim()) return;
-    addFolder(name);
-    handleClose();
+  async function handleSave() {
+    if (saving || !name.trim()) return;
+    setSaving(true);
+    try {
+      await addFolder(name);
+    } finally {
+      setSaving(false);
+    }
+    setName("");
+    onClose();
   }
 
   return createPortal(
@@ -74,16 +82,18 @@ export default function NewFolderModal({
           <button
             type="button"
             onClick={handleClose}
-            className="hover-surface rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text)]"
+            disabled={saving}
+            className="hover-surface rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text)] disabled:opacity-50"
           >
             취소
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="hover-accent rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white"
+            disabled={saving}
+            className="hover-accent rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
           >
-            저장
+            {saving ? "저장 중…" : "저장"}
           </button>
         </div>
       </div>

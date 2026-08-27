@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { FolderProvider } from "@/app/_lib/folder-context";
 import { LinkProvider } from "@/app/_lib/link-context";
-import { folders, links } from "@/app/_lib/mock-data";
+import { links } from "@/app/_lib/mock-data";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <FolderProvider initialFolders={folders}>
+        <FolderProvider>
           <LinkProvider initialLinks={links}>{children}</LinkProvider>
         </FolderProvider>
       </body>
