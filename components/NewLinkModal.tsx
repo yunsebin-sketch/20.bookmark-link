@@ -15,8 +15,11 @@ export default function NewLinkModal({
   const { folders } = useFolders();
   const { addLink } = useLinks();
   const [url, setUrl] = useState("");
-  const [folderId, setFolderId] = useState(folders[0]?.id ?? "");
+  const [folderId, setFolderId] = useState("");
   const [saving, setSaving] = useState(false);
+
+  // folders는 folders 테이블에서 비동기로 불러오므로, 선택값이 없으면 첫 폴더를 기본값으로 사용한다.
+  const selectedFolderId = folderId || folders[0]?.id || "";
 
   useEffect(() => {
     if (!open) return;
@@ -37,10 +40,10 @@ export default function NewLinkModal({
   }
 
   async function handleSave() {
-    if (!url.trim() || !folderId || saving) return;
+    if (!url.trim() || !selectedFolderId || saving) return;
     setSaving(true);
     try {
-      await addLink({ url, folderId });
+      await addLink({ url, folderId: selectedFolderId });
       handleClose();
     } finally {
       setSaving(false);
@@ -90,7 +93,7 @@ export default function NewLinkModal({
           <select
             id="link-folder"
             disabled={saving}
-            value={folderId}
+            value={selectedFolderId}
             onChange={(event) => setFolderId(event.target.value)}
             className="input-field w-full text-sm"
           >

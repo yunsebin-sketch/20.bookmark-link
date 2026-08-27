@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { createClient } from "@/utils/supabase/client";
 import type { BookmarkLink } from "@/app/_lib/types";
 
 type LinkContextValue = {
@@ -16,14 +24,59 @@ type LinkContextValue = {
 
 const LinkContext = createContext<LinkContextValue | null>(null);
 
+type LinkRow = {
+  id: number | string;
+  url: string;
+  title: string | null;
+  description: string | null;
+  thumbnail_url: string | null;
+  folder_id: number | string | null;
+};
+
+function toBookmarkLink(row: LinkRow): BookmarkLink {
+  return {
+    id: String(row.id),
+    title: row.title ?? row.url,
+    url: row.url,
+    description: row.description ?? undefined,
+    thumbnail: row.thumbnail_url ?? undefined,
+    folderId: row.folder_id == null ? "" : String(row.folder_id),
+  };
+}
+
 export function LinkProvider({
-  initialLinks,
+  initialLinks = [],
   children,
 }: {
-  initialLinks: BookmarkLink[];
+  initialLinks?: BookmarkLink[];
   children: ReactNode;
 }) {
   const [links, setLinks] = useState<BookmarkLink[]>(initialLinks);
+  const [supabase] = useState(() => createClient());
+  // 링크 추가 요청이 진행 중인지 추적해 저장 버튼 중복 클릭으로 인한 중복 삽입을 막는다.
+  const addingRef = useRef(false);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadLinks() {
+      const { data, error } = await supabase
+        .from("links")
+        .select("id, url, title, description, thumbnail_url, folder_id")
+        .order("created_at", { ascending: true });
+
+      if (!active || error || !data) return;
+
+      setLinks(data.map((row) => toBookmarkLink(row as LinkRow)));
+    }
+
+    loadLinks();
+
+    return () => {
+      active = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function addLink({
     url,
@@ -33,7 +86,7 @@ export function LinkProvider({
     folderId: string;
   }) {
     const trimmedUrl = url.trim();
-    if (!trimmedUrl || !folderId) return;
+    if (!trimmedUrl || !folderId || addingRef.current) return;
 
     let normalizedUrl: string;
     try {
@@ -42,33 +95,44 @@ export function LinkProvider({
       return;
     }
 
-    let title = new URL(normalizedUrl).hostname.replace(/^www\./, "");
-    let description: string | undefined;
-    let thumbnail: string | undefined;
-
+    addingRef.current = true;
     try {
-      const response = await fetch(
-        `/api/og?url=${encodeURIComponent(normalizedUrl)}`,
-      );
-      if (response.ok) {
-        const og = await response.json();
-        if (og.title) title = og.title;
-        if (og.description) description = og.description;
-        if (og.image) thumbnail = og.image;
-      }
-    } catch {
-      // 오픈 그래프 조회 실패 시 도메인 기반 기본값을 사용
-    }
+      let title = new URL(normalizedUrl).hostname.replace(/^www\./, "");
+      let description: string | undefined;
+      let thumbnail: string | undefined;
 
-    const newLink: BookmarkLink = {
-      id: crypto.randomUUID(),
-      title,
-      url: normalizedUrl,
-      description,
-      thumbnail,
-      folderId,
-    };
-    setLinks((prev) => [...prev, newLink]);
+      try {
+        const response = await fetch(
+          `/api/og?url=${encodeURIComponent(normalizedUrl)}`,
+        );
+        if (response.ok) {
+          const og = await response.json();
+          if (og.title) title = og.title;
+          if (og.description) description = og.description;
+          if (og.image) thumbnail = og.image;
+        }
+      } catch {
+        // 오픈 그래프 조회 실패 시 도메인 기반 기본값을 사용
+      }
+
+      const { data, error } = await supabase
+        .from("links")
+        .insert({
+          url: normalizedUrl,
+          title,
+          description: description ?? null,
+          thumbnail_url: thumbnail ?? null,
+          folder_id: Number(folderId),
+        })
+        .select("id, url, title, description, thumbnail_url, folder_id")
+        .single();
+
+      if (error || !data) return;
+
+      setLinks((prev) => [...prev, toBookmarkLink(data as LinkRow)]);
+    } finally {
+      addingRef.current = false;
+    }
   }
 
   function updateLink(
