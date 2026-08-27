@@ -84,8 +84,8 @@ export default function FolderNavItem({ folder }: { folder: BookmarkFolder }) {
     setConfirmOpen(true);
   }
 
-  function handleConfirmDelete() {
-    deleteFolder(folder.id);
+  async function handleConfirmDelete() {
+    await deleteFolder(folder.id);
     deleteLinksByFolder(folder.id);
     setConfirmOpen(false);
     if (active) {

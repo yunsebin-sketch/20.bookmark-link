@@ -15,7 +15,7 @@ type FolderContextValue = {
   folders: BookmarkFolder[];
   addFolder: (name: string) => Promise<void>;
   renameFolder: (id: string, name: string) => Promise<void>;
-  deleteFolder: (id: string) => void;
+  deleteFolder: (id: string) => Promise<void>;
 };
 
 const FolderContext = createContext<FolderContextValue | null>(null);
@@ -33,6 +33,8 @@ export function FolderProvider({
   const addingRef = useRef(false);
   // 폴더 이름 수정 요청이 진행 중인지 추적해 중복 요청을 막는다.
   const renamingRef = useRef(false);
+  // 폴더 삭제 요청이 진행 중인지 추적해 중복 요청을 막는다.
+  const deletingRef = useRef(false);
 
   useEffect(() => {
     let active = true;
@@ -109,8 +111,19 @@ export function FolderProvider({
     }
   }
 
-  function deleteFolder(id: string) {
-    setFolders((prev) => prev.filter((folder) => folder.id !== id));
+  async function deleteFolder(id: string) {
+    if (deletingRef.current) return;
+
+    deletingRef.current = true;
+    try {
+      const { error } = await supabase.from("folders").delete().eq("id", id);
+
+      if (error) return;
+
+      setFolders((prev) => prev.filter((folder) => folder.id !== id));
+    } finally {
+      deletingRef.current = false;
+    }
   }
 
   return (
