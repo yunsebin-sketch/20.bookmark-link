@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
@@ -36,6 +36,19 @@ export default function SignupPage() {
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState("");
 
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const passwordConfirmRef = useRef<HTMLInputElement>(null);
+
+  // 브라우저 자동완성/비밀번호 매니저는 onChange 없이 값을 채우므로,
+  // 마운트 직후 실제 input DOM 값을 상태에 반영한다.
+  useEffect(() => {
+    if (emailRef.current?.value) setEmail(emailRef.current.value);
+    if (passwordRef.current?.value) setPassword(passwordRef.current.value);
+    if (passwordConfirmRef.current?.value)
+      setPasswordConfirm(passwordConfirmRef.current.value);
+  }, []);
+
   const canSubmit =
     email.trim() !== "" &&
     password !== "" &&
@@ -44,9 +57,22 @@ export default function SignupPage() {
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (!canSubmit) return;
 
-    if (password !== passwordConfirm) {
+    // 자동완성 등으로 상태 반영이 늦어진 경우를 대비해 실제 input 값을 사용한다.
+    const currentEmail = (emailRef.current?.value ?? email).trim();
+    const currentPassword = passwordRef.current?.value ?? password;
+    const currentPasswordConfirm =
+      passwordConfirmRef.current?.value ?? passwordConfirm;
+    if (
+      !currentEmail ||
+      !currentPassword ||
+      !currentPasswordConfirm ||
+      submitting
+    ) {
+      return;
+    }
+
+    if (currentPassword !== currentPasswordConfirm) {
       setToast("비밀번호가 일치하지 않습니다.");
       return;
     }
@@ -54,8 +80,8 @@ export default function SignupPage() {
     setSubmitting(true);
     try {
       const { error } = await supabase.auth.signUp({
-        email: email.trim(),
-        password,
+        email: currentEmail,
+        password: currentPassword,
       });
 
       if (error) {
@@ -89,12 +115,18 @@ export default function SignupPage() {
               이메일
             </label>
             <input
+              ref={emailRef}
               id="email"
               name="email"
               type="email"
               autoComplete="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
+              onAnimationStart={(event) => {
+                if (event.animationName === "onAutoFillStart") {
+                  setEmail(event.currentTarget.value);
+                }
+              }}
               placeholder="you@example.com"
               className="input-field w-full text-sm"
             />
@@ -108,12 +140,18 @@ export default function SignupPage() {
               비밀번호
             </label>
             <input
+              ref={passwordRef}
               id="password"
               name="password"
               type="password"
               autoComplete="new-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
+              onAnimationStart={(event) => {
+                if (event.animationName === "onAutoFillStart") {
+                  setPassword(event.currentTarget.value);
+                }
+              }}
               placeholder="비밀번호를 입력하세요"
               className="input-field w-full text-sm"
             />
@@ -127,12 +165,18 @@ export default function SignupPage() {
               비밀번호 확인
             </label>
             <input
+              ref={passwordConfirmRef}
               id="password-confirm"
               name="password-confirm"
               type="password"
               autoComplete="new-password"
               value={passwordConfirm}
               onChange={(event) => setPasswordConfirm(event.target.value)}
+              onAnimationStart={(event) => {
+                if (event.animationName === "onAutoFillStart") {
+                  setPasswordConfirm(event.currentTarget.value);
+                }
+              }}
               placeholder="비밀번호를 다시 입력하세요"
               className="input-field w-full text-sm"
             />

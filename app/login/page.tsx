@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
@@ -32,17 +32,31 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState("");
 
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  // 브라우저 자동완성/비밀번호 매니저는 onChange 없이 값을 채우므로,
+  // 마운트 직후 실제 input DOM 값을 상태에 반영한다.
+  useEffect(() => {
+    if (emailRef.current?.value) setEmail(emailRef.current.value);
+    if (passwordRef.current?.value) setPassword(passwordRef.current.value);
+  }, []);
+
   const canSubmit = email.trim() !== "" && password !== "" && !submitting;
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (!canSubmit) return;
+
+    // 자동완성 등으로 상태 반영이 늦어진 경우를 대비해 실제 input 값을 사용한다.
+    const currentEmail = (emailRef.current?.value ?? email).trim();
+    const currentPassword = passwordRef.current?.value ?? password;
+    if (!currentEmail || !currentPassword || submitting) return;
 
     setSubmitting(true);
     try {
       const { error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password,
+        email: currentEmail,
+        password: currentPassword,
       });
 
       if (error) {
@@ -76,12 +90,18 @@ export default function LoginPage() {
               이메일
             </label>
             <input
+              ref={emailRef}
               id="email"
               name="email"
               type="email"
               autoComplete="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
+              onAnimationStart={(event) => {
+                if (event.animationName === "onAutoFillStart") {
+                  setEmail(event.currentTarget.value);
+                }
+              }}
               placeholder="you@example.com"
               className="input-field w-full text-sm"
             />
@@ -95,12 +115,18 @@ export default function LoginPage() {
               비밀번호
             </label>
             <input
+              ref={passwordRef}
               id="password"
               name="password"
               type="password"
               autoComplete="current-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
+              onAnimationStart={(event) => {
+                if (event.animationName === "onAutoFillStart") {
+                  setPassword(event.currentTarget.value);
+                }
+              }}
               placeholder="비밀번호를 입력하세요"
               className="input-field w-full text-sm"
             />

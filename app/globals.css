@@ -88,6 +88,21 @@ select {
   color: var(--text);
 }
 
+/* 브라우저 자동완성은 onChange를 발생시키지 않는다.
+   자동완성 시 실행되는 애니메이션을 걸어 JS에서 값을 감지할 수 있게 한다. */
+@keyframes onAutoFillStart {
+  from {
+    /**/
+  }
+  to {
+    /**/
+  }
+}
+
+.input-field:-webkit-autofill {
+  animation-name: onAutoFillStart;
+}
+
 .input-field::placeholder {
   color: var(--placeholder);
 }

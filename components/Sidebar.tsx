@@ -2,6 +2,7 @@
 
 import NavItem from "@/components/NavItem";
 import FolderList from "@/components/FolderList";
+import LogoutButton from "@/components/LogoutButton";
 import { useFolders } from "@/app/_lib/folder-context";
 
 function AllIcon() {
@@ -35,6 +36,9 @@ export default function Sidebar() {
           폴더
         </p>
         <FolderList folders={folders} />
+      </div>
+      <div className="mt-auto border-t border-[var(--border)] pt-3">
+        <LogoutButton />
       </div>
     </aside>
   );
