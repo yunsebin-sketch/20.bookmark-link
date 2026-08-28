@@ -141,15 +141,25 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-[var(--text-sub)]">
-          아직 계정이 없으신가요?{" "}
-          <Link
-            href="/signup"
-            className="font-medium text-[var(--accent)] hover:underline"
-          >
-            회원가입
-          </Link>
-        </p>
+        <div className="flex flex-col gap-2 text-center text-sm text-[var(--text-sub)]">
+          <p>
+            <Link
+              href="/forgot-password"
+              className="font-medium text-[var(--accent)] hover:underline"
+            >
+              비밀번호를 잊으셨나요?
+            </Link>
+          </p>
+          <p>
+            아직 계정이 없으신가요?{" "}
+            <Link
+              href="/signup"
+              className="font-medium text-[var(--accent)] hover:underline"
+            >
+              회원가입
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
