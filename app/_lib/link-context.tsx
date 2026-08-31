@@ -62,11 +62,19 @@ export function LinkProvider({
 
   useEffect(() => {
     let active = true;
+    // 현재 데이터를 불러온 사용자 ID. 계정이 바뀌었는지 판단하는 기준이 된다.
+    let currentUserId: string | null = null;
 
-    async function loadLinks() {
+    async function loadLinks(userId: string | null) {
+      if (!userId) {
+        if (active) setLinks([]);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("links")
         .select("id, url, title, description, thumbnail_url, folder_id")
+        .eq("user_id", userId)
         .order("created_at", { ascending: true });
 
       if (!active || error || !data) return;
@@ -74,10 +82,22 @@ export function LinkProvider({
       setLinks(data.map((row) => toBookmarkLink(row as LinkRow)));
     }
 
-    loadLinks();
+    // 최초 구독 시 INITIAL_SESSION 이벤트로 현재 세션이 전달되고,
+    // 로그인/로그아웃 등 계정이 바뀔 때마다 다시 호출된다.
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      const nextUserId = session?.user?.id ?? null;
+      // 사용자 계정이 변경된 경우에만 데이터를 다시 불러온다.
+      if (nextUserId === currentUserId) return;
+      currentUserId = nextUserId;
+      // 콜백 안에서 supabase 함수를 직접 await 하지 않도록 다음 틱으로 미룬다.
+      setTimeout(() => loadLinks(nextUserId), 0);
+    });
 
     return () => {
       active = false;
+      subscription.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
