@@ -5,7 +5,13 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
 // 로그인 없이 접근할 수 있는 경로. 그 외 모든 경로는 로그인한 사용자만 접근 가능하다.
-const PUBLIC_PATHS = ["/login", "/signup", "/forgot-password", "/auth"];
+const PUBLIC_PATHS = [
+  "/login",
+  "/signup",
+  "/forgot-password",
+  "/auth",
+  "/privacy",
+];
 
 export const updateSession = async (request: NextRequest) => {
   // Create an unmodified response

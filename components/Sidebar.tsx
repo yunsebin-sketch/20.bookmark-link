@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import NavItem from "@/components/NavItem";
 import FolderList from "@/components/FolderList";
 import LogoutButton from "@/components/LogoutButton";
@@ -39,6 +40,12 @@ export default function Sidebar() {
       </div>
       <div className="mt-auto border-t border-[var(--border)] pt-3">
         <LogoutButton />
+        <Link
+          href="/privacy"
+          className="mt-2 block px-3 text-xs text-[var(--placeholder)] hover:underline"
+        >
+          개인정보 처리방침
+        </Link>
       </div>
     </aside>
   );
