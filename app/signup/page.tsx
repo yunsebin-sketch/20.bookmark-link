@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import Toast from "@/components/Toast";
@@ -102,8 +103,17 @@ export default function SignupPage() {
       {toast && <Toast message={toast} onClose={() => setToast("")} />}
 
       <div className="flex w-full max-w-sm flex-col gap-8 rounded-lg border border-[var(--border)] bg-[var(--card)] p-8">
-        <h1 className="text-center text-2xl font-bold tracking-tight text-[var(--text)]">
-          북마크 링크
+        <h1 className="flex flex-col items-center gap-2 text-center text-2xl font-bold leading-tight tracking-tight text-[var(--text)]">
+          <Image
+            src="/mime-logo.png"
+            alt="춘천마임축제 로고"
+            width={392}
+            height={410}
+            className="h-8 w-auto"
+            priority
+          />
+          <span>춘천마임축제</span>
+          <span>북마크 링크</span>
         </h1>
 
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>

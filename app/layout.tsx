@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const siteName = "BOOKMARK LINKS";
+const siteName = "춘천마임축제 북마크 링크";
 const siteDescription =
 	"자주 보는 링크를 폴더로 정리하고 한곳에서 관리하는 북마크 서비스입니다.";
 
