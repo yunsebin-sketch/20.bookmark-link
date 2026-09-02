@@ -14,7 +14,12 @@ const geistMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+// 우선순위: 명시적 설정값 > Vercel 프로덕션 도메인(자동 주입) > 로컬 개발
+const siteUrl =
+	process.env.NEXT_PUBLIC_SITE_URL ??
+	(process.env.VERCEL_PROJECT_PRODUCTION_URL
+		? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+		: "http://localhost:3000");
 const siteName = "춘천마임축제 북마크 링크";
 const siteDescription =
 	"자주 보는 링크를 폴더로 정리하고 한곳에서 관리하는 북마크 서비스입니다.";
@@ -38,8 +43,8 @@ export const metadata: Metadata = {
 		images: [
 			{
 				url: "/thumbnail.png",
-				width: 2400,
-				height: 1260,
+				width: 1200,
+				height: 630,
 				alt: siteName,
 			},
 		],
@@ -54,7 +59,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
 	return (
 		<html
-			lang="en"
+			lang="ko"
 			className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
 		>
 			<body className="min-h-full flex flex-col">
