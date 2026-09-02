@@ -20,7 +20,7 @@ export default function NavItem({ href, label, count, icon }: NavItemProps) {
       href={href}
       className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium ${
         active
-          ? "bg-[var(--accent)] text-white"
+          ? "bg-[var(--accent)] text-[var(--on-accent)]"
           : "hover-surface text-[var(--text-sub)]"
       }`}
     >
@@ -30,7 +30,7 @@ export default function NavItem({ href, label, count, icon }: NavItemProps) {
       </span>
       {typeof count === "number" && (
         <span
-          className={`text-xs ${active ? "text-white/80" : "text-[var(--placeholder)]"}`}
+          className={`text-xs ${active ? "text-[var(--on-accent)] opacity-80" : "text-[var(--placeholder)]"}`}
         >
           {count}
         </span>

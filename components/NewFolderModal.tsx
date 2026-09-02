@@ -91,7 +91,7 @@ export default function NewFolderModal({
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="hover-accent rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+            className="hover-accent rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--on-accent)] disabled:opacity-50"
           >
             {saving ? "저장 중…" : "저장"}
           </button>

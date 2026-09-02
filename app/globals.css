@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: light;
   --background: #f7f7f5;
   --card: #ffffff;
   --card-translucent: rgba(255, 255, 255, 0.8);
@@ -8,12 +9,31 @@
   --text-sub: #787774;
   --placeholder: #9b9a97;
   --border: #e3e3e0;
-  --accent: #2eaadc;
-  --accent-hover: #2898c4;
+  --accent: #1f1f1f;
+  --accent-hover: #000000;
+  --on-accent: #ffffff;
   --hover-bg: #f1f1ef;
   --error: #eb5757;
   --error-hover: #d64545;
-  --success: #4dab9a;
+  --success: #37352f;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #191919;
+  --card: #202020;
+  --card-translucent: rgba(32, 32, 32, 0.8);
+  --text: #e3e3e0;
+  --text-sub: #8d8d8d;
+  --placeholder: #5a5a5a;
+  --border: #333333;
+  --accent: #e3e3e0;
+  --accent-hover: #ffffff;
+  --on-accent: #191919;
+  --hover-bg: #2f2f2f;
+  --error: #eb5757;
+  --error-hover: #d64545;
+  --success: #e3e3e0;
 }
 
 @theme inline {
@@ -42,6 +62,19 @@ select {
 
 .hover-surface:hover {
   background-color: var(--hover-bg);
+}
+
+/* 로고: 라이트/다크 테마에 따라 교체한다. */
+.logo-dark {
+  display: none;
+}
+
+[data-theme="dark"] .logo-light {
+  display: none;
+}
+
+[data-theme="dark"] .logo-dark {
+  display: block;
 }
 
 .hover-accent:hover {

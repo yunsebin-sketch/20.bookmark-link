@@ -94,7 +94,7 @@ export default function FolderNavItem({ folder }: { folder: BookmarkFolder }) {
   }
 
   const actionButtonClass = `hover-surface rounded-md p-1.5 ${
-    active ? "text-white" : "text-[var(--text-sub)]"
+    active ? "text-[var(--on-accent)]" : "text-[var(--text-sub)]"
   }`;
 
   return (
@@ -103,7 +103,7 @@ export default function FolderNavItem({ folder }: { folder: BookmarkFolder }) {
         href={href}
         className={`flex w-full items-center gap-2 rounded-lg py-2 pl-3 pr-16 text-sm font-medium ${
           active
-            ? "bg-[var(--accent)] text-white"
+            ? "bg-[var(--accent)] text-[var(--on-accent)]"
             : "hover-surface text-[var(--text-sub)]"
         }`}
       >
@@ -113,7 +113,7 @@ export default function FolderNavItem({ folder }: { folder: BookmarkFolder }) {
         </span>
       </Link>
       <span
-        className={`folder-count pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs ${active ? "text-white/80" : "text-[var(--placeholder)]"}`}
+        className={`folder-count pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs ${active ? "text-[var(--on-accent)] opacity-80" : "text-[var(--placeholder)]"}`}
       >
         {linkCount}
       </span>

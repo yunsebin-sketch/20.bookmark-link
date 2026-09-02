@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import Toast from "@/components/Toast";
+import Logo from "@/components/Logo";
+import ThemeToggle from "@/components/ThemeToggle";
 
 function toKoreanMessage(message: string): string {
   const normalized = message.toLowerCase();
@@ -99,19 +100,15 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[var(--background)] px-6 py-10">
+    <div className="relative flex min-h-screen items-center justify-center bg-[var(--background)] px-6 py-10">
+      <div className="absolute right-4 top-4">
+        <ThemeToggle />
+      </div>
       {toast && <Toast message={toast} onClose={() => setToast("")} />}
 
       <div className="flex w-full max-w-sm flex-col gap-8 rounded-lg border border-[var(--border)] bg-[var(--card)] p-8">
         <h1 className="flex flex-col items-center gap-2 text-center text-2xl font-bold leading-tight tracking-tight text-[var(--text)]">
-          <Image
-            src="/mime-logo.png"
-            alt="춘천마임축제 로고"
-            width={392}
-            height={410}
-            className="h-8 w-auto"
-            priority
-          />
+          <Logo className="h-8 w-auto" />
           <span>춘천마임축제</span>
           <span>북마크 링크</span>
         </h1>
@@ -195,7 +192,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={!canSubmit}
-            className="hover-accent mt-2 rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
+            className="hover-accent mt-2 rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--on-accent)] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {submitting ? "회원가입 중..." : "회원가입"}
           </button>

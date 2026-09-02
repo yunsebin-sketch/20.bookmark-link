@@ -15,12 +15,12 @@ const EFFECTIVE_DATE = new Date().toISOString().slice(0, 10);
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12 text-gray-800">
-      <header className="mb-10 border-b pb-6">
+    <main className="mx-auto max-w-3xl px-6 py-12 text-[var(--text)]">
+      <header className="mb-10 border-b border-[var(--border)] pb-6">
         <h1 className="text-3xl font-bold tracking-tight">
           개인정보 처리방침
         </h1>
-        <p className="mt-3 text-sm text-gray-600">
+        <p className="mt-3 text-sm text-[var(--text-sub)]">
           시행일:{" "}
           <time dateTime={EFFECTIVE_DATE}>{EFFECTIVE_DATE}</time>
         </p>
@@ -41,10 +41,10 @@ export default function PrivacyPolicyPage() {
 
       <nav
         aria-label="목차"
-        className="mb-12 rounded-lg border bg-gray-50 p-5"
+        className="mb-12 rounded-lg border border-[var(--border)] bg-[var(--hover-bg)] p-5"
       >
         <h2 className="mb-3 text-base font-semibold">목차</h2>
-        <ol className="list-decimal space-y-1 pl-5 text-sm text-gray-700">
+        <ol className="list-decimal space-y-1 pl-5 text-sm text-[var(--text-sub)]">
           <li>
             <a href="#s1" className="hover:underline">
               개인정보의 처리 목적
@@ -176,34 +176,34 @@ export default function PrivacyPolicyPage() {
           보유·이용기간 내에서 개인정보를 처리·보유합니다.
         </p>
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border text-sm">
-            <thead className="bg-gray-50">
+          <table className="w-full border-collapse border border-[var(--border)] text-sm">
+            <thead className="bg-[var(--hover-bg)]">
               <tr>
-                <th className="border px-3 py-2 text-left">
+                <th className="border border-[var(--border)] px-3 py-2 text-left">
                   처리 목적
                 </th>
-                <th className="border px-3 py-2 text-left">
+                <th className="border border-[var(--border)] px-3 py-2 text-left">
                   보유 기간
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="border px-3 py-2">
+                <td className="border border-[var(--border)] px-3 py-2">
                   회원 가입 및 관리
                 </td>
-                <td className="border px-3 py-2">회원 탈퇴 시까지</td>
+                <td className="border border-[var(--border)] px-3 py-2">회원 탈퇴 시까지</td>
               </tr>
               <tr>
-                <td className="border px-3 py-2">서비스 제공</td>
-                <td className="border px-3 py-2">
+                <td className="border border-[var(--border)] px-3 py-2">서비스 제공</td>
+                <td className="border border-[var(--border)] px-3 py-2">
                   서비스 제공 완료 시까지
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+        <p className="mt-3 text-sm text-[var(--text-sub)] leading-relaxed">
           다만, 관계 법령 위반에 따른 수사·조사가 진행 중인 경우 또는
           관련 법령에 따른 보존 의무가 있는 경우에는 해당 기간 종료
           시까지 보유합니다.
@@ -241,52 +241,52 @@ export default function PrivacyPolicyPage() {
           대한민국 리전(Seoul)에서 개인정보를 저장·처리하고 있습니다.
         </p>
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse border text-sm">
-            <thead className="bg-gray-50">
+          <table className="w-full border-collapse border border-[var(--border)] text-sm">
+            <thead className="bg-[var(--hover-bg)]">
               <tr>
-                <th className="border px-3 py-2 text-left">
+                <th className="border border-[var(--border)] px-3 py-2 text-left">
                   수탁업체
                 </th>
-                <th className="border px-3 py-2 text-left">
+                <th className="border border-[var(--border)] px-3 py-2 text-left">
                   위탁 업무
                 </th>
-                <th className="border px-3 py-2 text-left">
+                <th className="border border-[var(--border)] px-3 py-2 text-left">
                   처리 지역
                 </th>
-                <th className="border px-3 py-2 text-left">
+                <th className="border border-[var(--border)] px-3 py-2 text-left">
                   보유·이용 기간
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="border px-3 py-2">Supabase Inc.</td>
-                <td className="border px-3 py-2">
+                <td className="border border-[var(--border)] px-3 py-2">Supabase Inc.</td>
+                <td className="border border-[var(--border)] px-3 py-2">
                   회원 정보 저장 및 인증 처리, 데이터베이스 운영
                 </td>
-                <td className="border px-3 py-2">
+                <td className="border border-[var(--border)] px-3 py-2">
                   대한민국 (Seoul 리전)
                 </td>
-                <td className="border px-3 py-2">
+                <td className="border border-[var(--border)] px-3 py-2">
                   회원 탈퇴 또는 위탁계약 종료 시까지
                 </td>
               </tr>
               <tr>
-                <td className="border px-3 py-2">Vercel Inc.</td>
-                <td className="border px-3 py-2">
+                <td className="border border-[var(--border)] px-3 py-2">Vercel Inc.</td>
+                <td className="border border-[var(--border)] px-3 py-2">
                   웹 서비스 호스팅 및 배포
                 </td>
-                <td className="border px-3 py-2">
+                <td className="border border-[var(--border)] px-3 py-2">
                   대한민국 (Seoul Edge)
                 </td>
-                <td className="border px-3 py-2">
+                <td className="border border-[var(--border)] px-3 py-2">
                   위탁계약 종료 시까지
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+        <p className="mt-3 text-sm text-[var(--text-sub)] leading-relaxed">
           {SERVICE_NAME}은 「개인정보 보호법」 제26조에 따라 위탁계약
           시 개인정보의 안전한 처리를 위한 기술적·관리적 보호조치,
           재위탁 제한, 관리·감독 등 책임에 관한 사항을 계약에 반영하고
@@ -312,7 +312,7 @@ export default function PrivacyPolicyPage() {
           권리 행사는{" "}
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className="text-blue-600 underline"
+            className="text-[var(--accent)] underline"
           >
             {CONTACT_EMAIL}
           </a>
@@ -374,7 +374,7 @@ export default function PrivacyPolicyPage() {
           피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를
           지정하고 있습니다.
         </p>
-        <div className="rounded-lg border bg-gray-50 p-4 leading-relaxed">
+        <div className="rounded-lg border border-[var(--border)] bg-[var(--hover-bg)] p-4 leading-relaxed">
           <p>
             <strong>개인정보 보호책임자</strong>: {OPERATOR_NAME}
           </p>
@@ -382,7 +382,7 @@ export default function PrivacyPolicyPage() {
             <strong>연락처</strong>:{" "}
             <a
               href={`mailto:${CONTACT_EMAIL}`}
-              className="text-blue-600 underline"
+              className="text-[var(--accent)] underline"
             >
               {CONTACT_EMAIL}
             </a>
@@ -405,7 +405,7 @@ export default function PrivacyPolicyPage() {
               href="https://www.kopico.go.kr"
               target="_blank"
               rel="noreferrer noopener"
-              className="text-blue-600 underline"
+              className="text-[var(--accent)] underline"
             >
               www.kopico.go.kr
             </a>
@@ -417,7 +417,7 @@ export default function PrivacyPolicyPage() {
               href="https://privacy.kisa.or.kr"
               target="_blank"
               rel="noreferrer noopener"
-              className="text-blue-600 underline"
+              className="text-[var(--accent)] underline"
             >
               privacy.kisa.or.kr
             </a>
@@ -429,7 +429,7 @@ export default function PrivacyPolicyPage() {
               href="https://www.spo.go.kr"
               target="_blank"
               rel="noreferrer noopener"
-              className="text-blue-600 underline"
+              className="text-[var(--accent)] underline"
             >
               www.spo.go.kr
             </a>
@@ -441,7 +441,7 @@ export default function PrivacyPolicyPage() {
               href="https://ecrm.cyber.go.kr"
               target="_blank"
               rel="noreferrer noopener"
-              className="text-blue-600 underline"
+              className="text-[var(--accent)] underline"
             >
               ecrm.cyber.go.kr
             </a>
@@ -462,7 +462,7 @@ export default function PrivacyPolicyPage() {
         </p>
       </section>
 
-      <footer className="mt-16 border-t pt-6 text-sm text-gray-500">
+      <footer className="mt-16 border-t border-[var(--border)] pt-6 text-sm text-[var(--text-sub)]">
         <p>시행일: {EFFECTIVE_DATE}</p>
       </footer>
     </main>
