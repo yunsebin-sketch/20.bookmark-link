@@ -192,7 +192,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={!canSubmit}
-            className="hover-accent mt-2 rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--on-accent)] disabled:cursor-not-allowed disabled:opacity-40"
+            className="hover-point mt-2 rounded-md bg-[var(--point)] px-4 py-2 text-sm font-medium text-[var(--on-point)] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {submitting ? "회원가입 중..." : "회원가입"}
           </button>

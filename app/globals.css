@@ -12,6 +12,9 @@
   --accent: #1f1f1f;
   --accent-hover: #000000;
   --on-accent: #ffffff;
+  --point: #ffdb26;
+  --point-hover: #f2ca00;
+  --on-point: #1f1f1f;
   --hover-bg: #f1f1ef;
   --error: #eb5757;
   --error-hover: #d64545;
@@ -30,6 +33,9 @@
   --accent: #e3e3e0;
   --accent-hover: #ffffff;
   --on-accent: #191919;
+  --point: #ffdb26;
+  --point-hover: #ffe45c;
+  --on-point: #1f1f1f;
   --hover-bg: #2f2f2f;
   --error: #eb5757;
   --error-hover: #d64545;
@@ -79,6 +85,10 @@ select {
 
 .hover-accent:hover {
   background-color: var(--accent-hover);
+}
+
+.hover-point:hover {
+  background-color: var(--point-hover);
 }
 
 .hover-danger:hover {

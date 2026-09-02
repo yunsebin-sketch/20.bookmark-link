@@ -203,7 +203,7 @@ export default function LoginPage() {
             아직 계정이 없으신가요?{" "}
             <Link
               href="/signup"
-              className="font-medium text-[var(--accent)] hover:underline"
+              className="font-semibold text-[var(--point)] underline decoration-[var(--point)] underline-offset-2"
             >
               회원가입
             </Link>

@@ -117,7 +117,7 @@ export default function NewLinkModal({
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="hover-accent rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--on-accent)] disabled:cursor-not-allowed disabled:opacity-40"
+            className="hover-point rounded-md bg-[var(--point)] px-4 py-2 text-sm font-medium text-[var(--on-point)] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {saving ? "저장 중..." : "저장"}
           </button>

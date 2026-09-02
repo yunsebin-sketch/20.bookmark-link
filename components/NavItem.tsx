@@ -29,9 +29,7 @@ export default function NavItem({ href, label, count, icon }: NavItemProps) {
         {label}
       </span>
       {typeof count === "number" && (
-        <span
-          className={`text-xs ${active ? "text-[var(--on-accent)] opacity-80" : "text-[var(--placeholder)]"}`}
-        >
+        <span className="min-w-[1.125rem] rounded-full bg-[var(--point)] px-1.5 py-0.5 text-center text-[10px] font-semibold leading-none text-[var(--on-point)]">
           {count}
         </span>
       )}

@@ -112,9 +112,7 @@ export default function FolderNavItem({ folder }: { folder: BookmarkFolder }) {
           <span className="truncate">{folder.name}</span>
         </span>
       </Link>
-      <span
-        className={`folder-count pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs ${active ? "text-[var(--on-accent)] opacity-80" : "text-[var(--placeholder)]"}`}
-      >
+      <span className="folder-count pointer-events-none absolute right-3 top-1/2 min-w-[1.125rem] -translate-y-1/2 rounded-full bg-[var(--point)] px-1.5 py-0.5 text-center text-[10px] font-semibold leading-none text-[var(--on-point)]">
         {linkCount}
       </span>
       <div className="folder-actions absolute right-1.5 top-1/2 flex -translate-y-1/2 items-center gap-0.5">
